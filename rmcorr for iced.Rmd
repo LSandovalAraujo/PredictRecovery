@@ -6,6 +6,102 @@ output: html_document
 ---
 ```{r}
 #importing libraries
+library(rmcorr)
+library(dplyr)
+library(data.table)
+library(tidyverse)
+library(stringr)
+```
 
+```{r}
+#testing rmcorr using five different participants
+#gonna random number generator this to pick which participants
+
+floor(runif(5, min=1, max=128))
+```
+```{r}
+#picked the closest participants to randomly generated numbers 13, 82, 118, 50, and 26
+#comes out to PR011, PR084, PR117, PR044, and PR025
+
+PR011 = read.csv('C:/Users/Luis/Box/R15 Sensor Preprocessing and Analysis/EMAPhysioComparisons/Participant Matched Data/PhysioEMA_Match_PR011.csv')
+PR025 = read.csv('C:/Users/Luis/Box/R15 Sensor Preprocessing and Analysis/EMAPhysioComparisons/Participant Matched Data/PhysioEMA_Match_PR025.csv')
+PR044 = read.csv('C:/Users/Luis/Box/R15 Sensor Preprocessing and Analysis/EMAPhysioComparisons/Participant Matched Data/PhysioEMA_Match_PR044.csv')
+PR084 = read.csv('C:/Users/Luis/Box/R15 Sensor Preprocessing and Analysis/EMAPhysioComparisons/Participant Matched Data/PhysioEMA_Match_PR084.csv')
+PR117 = read.csv('C:/Users/Luis/Box/R15 Sensor Preprocessing and Analysis/EMAPhysioComparisons/Participant Matched Data/PhysioEMA_Match_PR117.csv')
+```
+
+
+```{r}
+#let's take a look at some data first
+PR117
+```
+```{r}
+#preparing the data
+#steps of the process are as follows:
+#1. Add column to each dataframe designating the participant ID
+#2. Append datasets together
+#We'll start by adding participant IDs, column labelled pid
+
+PR011a = PR011 %>%
+  mutate(pid = 'PR011', .before = 'X')
+PR025a = PR025 %>%
+  mutate(pid = 'PR025', .before = 'X')
+PR044a = PR044 %>%
+  mutate(pid = 'PR044', .before = 'X')
+PR084a = PR084 %>%
+  mutate(pid = 'PR084', .before = 'X')
+PR117a = PR117 %>%
+  mutate(pid = 'PR117', .before = 'X')
+```
+
+```{r}
+#merging dataframes together, testing first
+
+data = rbind(PR011a, PR025a, PR044a, PR084a, PR117a)
+data
+```
+```{r}
+#we're doing the correlations now
+
+rmc.out = rmcorr('pid', 'HR_Mean', 'fowg', data)
+rmc.out
+```
+```{r}
+plot(rmc.out, overall = T)
+```
+
+```{r}
+print(rmc.out)
+```
+```{r}
+#reading the rest of my files in
+dat_files = list.files("C:/Users/Luis/Box/R15 Sensor Preprocessing and Analysis/EMAPhysioComparisons/Participant Matched Data/", pattern = '.csv')
+
+dat_files
+
+setwd('C:/Users/Luis/Box/R15 Sensor Preprocessing and Analysis/EMAPhysioComparisons/Participant Matched Data/')
+data2 = map_df(dat_files, ~read_csv(.x) %>%
+        mutate(pid = str_remove_all(.x, ".csv")))
+  
+```
+
+```{r}
+data2 %>%
+  transform(pid=str_replace(pid, "PhysioEMA_Match_", ""))
+```
+
+```{r}
+data3 = relocate(data2, 'pid', .before = ...1)
+
+data3 %>%
+  transform(pid=str_replace(pid, "PhysioEMA_Match_", ""))
+data3
+```
+```{r}
+rmc.out2 = rmcorr('pid', 'TEMP_MAD', 'feelfat', data3)
+rmc.out2
+```
+```{r}
+plot(rmc.out2, overall = T)
 ```
 
