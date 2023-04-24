@@ -93,15 +93,46 @@ data2 %>%
 ```{r}
 data3 = relocate(data2, 'pid', .before = ...1)
 
-data3 %>%
+data3 = data3 %>%
   transform(pid=str_replace(pid, "PhysioEMA_Match_", ""))
 data3
 ```
+
 ```{r}
 rmc.out2 = rmcorr('pid', 'TEMP_MAD', 'feelfat', data3)
 rmc.out2
 ```
 ```{r}
 plot(rmc.out2, overall = T)
+```
+
+```{r}
+#dx values for currentdx1 
+#1 = AN, 2 = BN, 3 = BED, 4 = OSFED, 5 = ARFID
+diag = read.csv('C:/Users/Luis/Desktop/dx.csv')
+diag
+```
+```{r}
+#renaming column then merging dataframes
+colnames(diag)[1] = "pid"
+data4 = left_join(data3, diag, by="pid")
+data4
+```
+```{r}
+#making the groups
+andata = subset(data4, data4$currentdx1_ade7bc == 1)
+bndata = subset(data4, data4$currentdx1_ade7bc == 2)
+osfeddata = subset(data4, data4$currentdx1_ade7bc == 4)
+activedata = subset(data4, data4$diagnostic_status == 2)
+```
+
+```{r}
+#this is an example using BN data
+rmc.out3 = rmcorr('pid', 'HR_Mean', 'fowg', activedata)
+rmc.out3
+plot(rmc.out3, overall = T)
+```
+```{r}
+
 ```
 
