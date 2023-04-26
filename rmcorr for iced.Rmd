@@ -99,7 +99,7 @@ data3
 ```
 
 ```{r}
-rmc.out2 = rmcorr('pid', 'TEMP_MAD', 'feelfat', data3)
+rmc.out2 = rmcorr('pid', 'HR_Mean', 'tired', data3)
 rmc.out2
 ```
 ```{r}
@@ -117,6 +117,7 @@ diag
 colnames(diag)[1] = "pid"
 data4 = left_join(data3, diag, by="pid")
 data4
+write.csv(data4, "C:/Users/Luis/Desktop\\PhysioEMAdx.csv", row.names = FALSE)
 ```
 ```{r}
 #making the groups
@@ -133,6 +134,142 @@ rmc.out3
 plot(rmc.out3, overall = T)
 ```
 ```{r}
+#AN group
 
+an_hrmean_fowg = rmcorr('pid', 'HR_Mean', 'fowg', andata)
+an_hrstdev_fowg = rmcorr('pid', 'HR_Stdev', 'fowg', andata)
+an_hrmad_fowg = rmcorr('pid', 'HR_MAD', 'fowg', andata)
+
+an_hrmean_fowg
+an_hrstdev_fowg
+an_hrmad_fowg
+
+plot(an_hrmean_fowg, overall = T)
+plot(an_hrstdev_fowg, overall = T)
+plot(an_hrmad_fowg, overall = T)
+```
+
+```{r}
+bn_hrmean_fowg = rmcorr('pid', 'HR_Mean', 'fowg', bndata)
+bn_hrstdev_fowg = rmcorr('pid', 'HR_Stdev', 'fowg', bndata)
+bn_hrmad_fowg = rmcorr('pid', 'HR_MAD', 'fowg', bndata)
+
+bn_hrmean_fowg
+bn_hrstdev_fowg
+bn_hrmad_fowg
+
+plot(bn_hrmean_fowg, overall = T)
+plot(bn_hrstdev_fowg, overall = T)
+plot(bn_hrmad_fowg, overall = T)
+```
+```{r}
+names(andata)
+```
+```{r}
+bn_hrmean_anxiety = rmcorr('pid', 'HR_Mean', 'anxiety', bndata)
+bn_hrstdev_anxiety = rmcorr('pid', 'HR_Stdev', 'anxiety', bndata)
+bn_hrmad_anxiety = rmcorr('pid', 'HR_MAD', 'anxiety', bndata)
+
+bn_hrmean_anxiety
+bn_hrstdev_anxiety
+bn_hrmad_anxiety
+
+plot(bn_hrmean_anxiety, overall = T)
+plot(bn_hrstdev_anxiety, overall = T)
+plot(bn_hrmad_anxiety, overall = T)
+```
+```{r}
+bn_edamean_anxiety = rmcorr('pid', 'EDA_Mean', 'anxiety', bndata)
+bn_edastdev_anxiety = rmcorr('pid', 'EDA_Stdev', 'anxiety', bndata)
+bn_edamad_anxiety = rmcorr('pid', 'EDA_MAD', 'anxiety', bndata)
+
+bn_edamean_anxiety
+bn_edastdev_anxiety
+bn_edamad_anxiety
+
+plot(bn_edamean_anxiety, overall = T)
+plot(bn_edastdev_anxiety, overall = T)
+plot(bn_edamad_anxiety, overall = T)
+```
+```{r}
+osfed_hrmean_fowg = rmcorr('pid', 'HR_Mean', 'fowg', osfeddata)
+osfed_hrstdev_fowg = rmcorr('pid', 'HR_Stdev', 'fowg', osfeddata)
+osfed_hrmad_fowg = rmcorr('pid', 'HR_MAD', 'fowg', osfeddata)
+
+osfed_hrmean_fowg
+osfed_hrstdev_fowg
+osfed_hrmad_fowg
+
+plot(osfed_hrmean_fowg, overall = T)
+plot(osfed_hrstdev_fowg, overall = T)
+plot(osfed_hrmad_fowg, overall = T)
+```
+```{r}
+an_tempmean_fowg = rmcorr('pid', 'TEMP_Mean', 'fowg', andata)
+an_tempstdev_fowg = rmcorr('pid', 'TEMP_Stdev', 'fowg', andata)
+an_tempmad_fowg = rmcorr('pid', 'TEMP_MAD', 'fowg', andata)
+
+an_tempmean_fowg
+an_tempstdev_fowg
+an_tempmad_fowg
+
+plot(an_tempmean_fowg, overall = T)
+plot(an_tempstdev_fowg, overall = T)
+plot(an_tempmad_fowg, overall = T)
+```
+
+```{r}
+an_hrmean_sleep = rmcorr('pid', 'HR_Mean', 'sleep', andata)
+an_hrstdev_sleep = rmcorr('pid', 'HR_Stdev', 'sleep', andata)
+an_hrmad_sleep = rmcorr('pid', 'HR_MAD', 'sleep', andata)
+
+an_hrmean_sleep
+an_hrstdev_sleep
+an_hrmad_sleep
+
+plot(an_hrmean_sleep, overall = T)
+plot(an_hrstdev_sleep, overall = T)
+plot(an_hrmad_sleep, overall = T)
+```
+
+```{r}
+an_hrmean_tired = rmcorr('pid', 'HR_Mean', 'tired', andata)
+an_hrstdev_tired = rmcorr('pid', 'HR_Stdev', 'tired', andata)
+an_hrmad_tired = rmcorr('pid', 'HR_MAD', 'tired', andata)
+
+an_hrmean_tired
+an_hrstdev_tired
+an_hrmad_tired
+
+plot(an_hrmean_tired, overall = T)
+plot(an_hrstdev_tired, overall = T)
+plot(an_hrmad_tired, overall = T)
+```
+```{r}
+bn_hrmean_tired = rmcorr('pid', 'HR_Mean', 'tired', bndata)
+bn_hrstdev_tired = rmcorr('pid', 'HR_Stdev', 'tired', bndata)
+bn_hrmad_tired = rmcorr('pid', 'HR_MAD', 'tired', bndata)
+
+bn_hrmean_tired
+bn_hrstdev_tired
+bn_hrmad_tired
+
+plot(bn_hrmean_tired, overall = T)
+plot(bn_hrstdev_tired, overall = T)
+plot(bn_hrmad_tired, overall = T)
+```
+
+```{r}
+bn_hrmean_feelfat = rmcorr('pid', 'HR_Mean', 'feelfat', bndata)
+bn_hrstdev_feelfat = rmcorr('pid', 'HR_Stdev', 'feelfat', bndata)
+bn_hrmad_feelfat = rmcorr('pid', 'HR_MAD', 'feelfat', bndata)
+
+bn_hrmean_feelfat
+bn_hrstdev_feelfat
+bn_hrmad_feelfat
+
+plot(bn_hrmean_feelfat, overall = T)
+plot(bn_hrstdev_feelfat, overall = T)
+plot(bn_hrmad_feelfat, overall = T)
 ```
 
