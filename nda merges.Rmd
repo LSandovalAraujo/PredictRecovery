@@ -1,0 +1,52 @@
+---
+title: "NIH NDA merges and data"
+author: "Luis Sandoval-Araujo"
+date: "2023-05-15"
+output: html_document
+---
+```{r}
+library(tidyverse)
+```
+
+```{r}
+dat_files = list.files("C:/Users/Luis/Box/R15 Sensor Preprocessing and Analysis/Data/", recursive = T, pattern = "survey_responses_6758.csv") %>%
+  stringr::str_subset(., "CC", negate = TRUE)%>%
+  stringr::str_subset(., "Sofie Data", negate = TRUE)
+dat_files
+```
+
+
+
+```{r}
+setwd('C:/Users/Luis/Box/R15 Sensor Preprocessing and Analysis/Data/')
+data = map_df(dat_files, ~read_csv(.x) %>% 
+                mutate(across(everything(), as.character)))
+data
+```
+
+
+```{r}
+data2 = data %>%
+  transform('Name'=str_replace(Name, "User #", ""))
+data2
+```
+
+```{r}
+ids = read.csv('C:/Users/Luis/Box/R15 Sensor Preprocessing and Analysis/Data/Ethica IDs.csv')
+ids
+```
+
+```{r}
+colnames(ids)[2] = "Name"
+ids = ids %>% 
+  mutate(across(everything(), as.character))
+```
+
+```{r}
+data3 = left_join(data2, ids, by="Name")
+data3
+```
+```{r}
+write.csv(data3, "C:/Users/Luis/Box/R15 Sensor Preprocessing and Analysis/Ethica Morning Surveys.csv", row.names = FALSE)
+```
+

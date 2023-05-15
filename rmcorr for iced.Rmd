@@ -96,11 +96,12 @@ data3 = relocate(data2, 'pid', .before = ...1)
 data3 = data3 %>%
   transform(pid=str_replace(pid, "PhysioEMA_Match_", ""))
 data3 = data3[-27,]
+data3 = data3[-368,]
 data3
 ```
 
 ```{r}
-rmc.out2 = rmcorr('pid', 'TEMP_Mean', 'feelfat', data3)
+rmc.out2 = rmcorr('pid', 'EDA_Mean', 'fowg', data3)
 rmc.out2
 ```
 ```{r}
@@ -134,15 +135,15 @@ unique(data4$pid)
 
 ```{r}
 #this is an example using BN data
-rmc.out3 = rmcorr('pid', 'HR_Mean', 'fowg', activedata)
+rmc.out3 = rmcorr('pid', 'EDA_Mean', 'feelfat', andata)
 rmc.out3
 plot(rmc.out3, overall = T)
 ```
 ```{r}
 #AN group
 
-an_hrmean_fowg = rmcorr('pid', 'HR_Mean', 'fowg', andata)
-an_hrstdev_fowg = rmcorr('pid', 'HR_Stdev', 'fowg', andata)
+an_hrmean_fowg = rmcorr('pid', 'TEMP_Mean', 'tired', andata)
+an_hrstdev_fowg = rmcorr('pid', 'TEMP_Stdev', 'tired', andata)
 #an_hrmad_fowg = rmcorr('pid', 'HR_MAD', 'feelfat', andata)
 
 an_hrmean_fowg
@@ -201,6 +202,15 @@ datasplit = lapply(split(data4, data4$pid), function(x) x$feelfat_z = scale(x$fe
 dsdf = data.frame(pid = rep(names(datasplit), sapply(datasplit, length)), feelfat_Z = unlist(datasplit))
 data5['feelfat_Z'] = dsdf['feelfat_Z']
 data5
+```
+```{r}
+datasplit = lapply(split(data4, data4$pid), function(x) x$tired_z = scale(x$tired))
+dsdf = data.frame(pid = rep(names(datasplit), sapply(datasplit, length)), tired_Z = unlist(datasplit))
+data5['tired_Z'] = dsdf['tired_Z']
+data5
+```
+```{r}
+write.csv(data5, "C:/Users/Luis/Desktop\\PhysioEMAdx_z.csv", row.names = FALSE)
 ```
 
 ```{r}
