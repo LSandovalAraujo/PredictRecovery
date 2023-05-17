@@ -50,3 +50,39 @@ data3
 write.csv(data3, "C:/Users/Luis/Box/R15 Sensor Preprocessing and Analysis/Ethica Morning Surveys.csv", row.names = FALSE)
 ```
 
+```{r}
+#pulling in data and IDs
+#raw EMA pulled directly from Ethica - we don't need everything previously where we tried to merge things
+#GUIDs generated from the NIH NDA tool and then reformatted to include participant IDs
+
+morningSurvey = read.csv("C:/Users/Luis/Box/R15 Sensor Preprocessing and Analysis/NDA/responses/survey_responses_6758.csv", check.names = FALSE)
+#check.names seems to be how we prevent the prefixes from showing up in the output dataframe, prevents the issue we had above 
+guids = read.csv("C:/Users/Luis/Box/R15 Sensor Preprocessing and Analysis/NDA/GUID RESULTS.csv")
+ethicaIDs = read.csv("C:/Users/Luis/Box/R15 Sensor Preprocessing and Analysis/Data/Ethica IDs.csv")
+```
+
+```{r}
+morningSurvey
+guids
+ethicaIDs
+```
+
+```{r}
+#renaming columns to make unifying easier
+colnames(ethicaIDs)[2] = "Name"
+colnames(ethicaIDs)[1] = "src_subject_id"
+ethicaIDs$Name = as.character(ethicaIDs$Name)
+ethicaIDs
+morningSurvey$Name = as.character(morningSurvey$Name)
+morningSurvey
+```
+```{r}
+fullIDs = left_join(ethicaIDs, guids, by="src_subject_id")
+fullIDs
+```
+
+```{r}
+fullMorningSurvey = left_join(fullIDs, morningSurvey, by="Name")
+fullMorningSurvey
+```
+
