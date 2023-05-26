@@ -1,0 +1,121 @@
+---
+title: "NIH NDA merges and data"
+author: "Luis Sandoval-Araujo"
+date: "2023-05-15"
+output: html_document
+---
+```{r}
+library(tidyverse)
+```
+
+```{r}
+dat_files = list.files("/Users/sandoval/Library/CloudStorage/Box-Box/R15 Sensor Preprocessing and Analysis/Data/", recursive = T, pattern = "survey_responses_6758.csv") %>%
+  stringr::str_subset(., "CC", negate = TRUE)%>%
+  stringr::str_subset(., "Sofie Data", negate = TRUE)
+dat_files
+```
+
+
+
+```{r}
+setwd('C:/Users/Luis/Box/R15 Sensor Preprocessing and Analysis/Data/')
+data = map_df(dat_files, ~read_csv(.x) %>% 
+                mutate(across(everything(), as.character)))
+data
+```
+
+
+```{r}
+data2 = data %>%
+  transform('Name'=str_replace(Name, "User #", ""))
+data2
+```
+
+```{r}
+ids = read.csv('C:/Users/Luis/Box/R15 Sensor Preprocessing and Analysis/Data/Ethica IDs.csv')
+ids
+```
+
+```{r}
+colnames(ids)[2] = "Name"
+ids = ids %>% 
+  mutate(across(everything(), as.character))
+```
+
+```{r}
+data3 = left_join(data2, ids, by="Name")
+data3
+```
+```{r}
+write.csv(data3, "C:/Users/Luis/Box/R15 Sensor Preprocessing and Analysis/Ethica Morning Surveys.csv", row.names = FALSE)
+```
+
+```{r}
+#pulling in data and IDs
+#raw EMA pulled directly from Ethica - we don't need everything previously where we tried to merge things
+#GUIDs generated from the NIH NDA tool and then reformatted to include participant IDs
+
+morningSurvey = read.csv("C:/Users/Luis/Box/R15 Sensor Preprocessing and Analysis/NDA/responses/survey_responses_6758.csv", check.names = FALSE)
+#check.names seems to be how we prevent the prefixes from showing up in the output dataframe, prevents the issue we had above 
+guids = read.csv("C:/Users/Luis/Box/R15 Sensor Preprocessing and Analysis/NDA/GUID RESULTS.csv")
+ethicaIDs = read.csv("C:/Users/Luis/Box/R15 Sensor Preprocessing and Analysis/Data/Ethica IDs.csv")
+```
+
+```{r}
+morningSurvey
+guids
+ethicaIDs
+```
+
+```{r}
+#renaming columns to make unifying easier
+colnames(ethicaIDs)[2] = "Name"
+colnames(ethicaIDs)[1] = "src_subject_id"
+ethicaIDs$Name = as.character(ethicaIDs$Name)
+ethicaIDs
+morningSurvey$Name = as.character(morningSurvey$Name)
+morningSurvey
+```
+```{r}
+fullIDs = left_join(ethicaIDs, guids, by="src_subject_id")
+fullIDs
+```
+
+```{r}
+fullMorningSurvey = left_join(fullIDs, morningSurvey, by="Name")
+fullMorningSurvey
+```
+
+```{r}
+dat_files = list.files("/Users/sandoval/Library/CloudStorage/Box-Box/R15 Sensor Preprocessing and Analysis/EMAPhysioComparisons/Participant Matched Data/", pattern = '.csv')
+
+dat_files
+
+setwd('/Users/sandoval/Library/CloudStorage/Box-Box/R15 Sensor Preprocessing and Analysis/EMAPhysioComparisons/Participant Matched Data/')
+data2 = map_df(dat_files, ~read_csv(.x) %>%
+        mutate(pid = str_remove_all(.x, ".csv")))
+```
+```{r}
+data2 = data2 %>%
+  transform(pid=str_replace(pid, "PhysioEMA_Match_", ""))
+data2
+
+```
+```{r}
+data3 = data2[-27,]
+data4 = data3[-368,]
+data4
+```
+
+```{r}
+colnames(data4)
+```
+```{r}
+allphysio = data4[ -c(2,34:103) ]
+colnames(allphysio)
+```
+```{r}
+allphysio['Window_Type'] = 'Survey'
+allphysio
+```
+
