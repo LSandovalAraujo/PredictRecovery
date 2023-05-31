@@ -86,3 +86,23 @@ fullMorningSurvey = left_join(fullIDs, morningSurvey, by="Name")
 fullMorningSurvey
 ```
 
+```{r}
+write.csv(fullMorningSurvey, "C:/Users/Luis/Box/R15 Sensor Preprocessing and Analysis/NDA/Ethica Morning Surveys.csv", row.names = FALSE)
+```
+
+```{r}
+afternoonSurvey = read.csv("C:/Users/Luis/Box/R15 Sensor Preprocessing and Analysis/NDA/responses/survey_responses_6963.csv", check.names = FALSE)
+afternoonSurvey$Name = as.character(afternoonSurvey$Name)
+fullafternoonSurvey = left_join(fullIDs, afternoonSurvey, by="Name")
+fullafternoonSurvey
+write.csv(fullafternoonSurvey, "C:/Users/Luis/Box/R15 Sensor Preprocessing and Analysis/NDA/Ethica Afternoon Surveys.csv", row.names = FALSE)
+```
+
+```{r}
+eveningSurvey = read.csv("C:/Users/Luis/Box/R15 Sensor Preprocessing and Analysis/NDA/responses/survey_responses_6964.csv", check.names = FALSE)
+eveningSurvey$Name = as.character(eveningSurvey$Name)
+fulleveningSurvey = left_join(fullIDs, eveningSurvey, by="Name")
+fulleveningSurvey
+write.csv(fulleveningSurvey, "C:/Users/Luis/Box/R15 Sensor Preprocessing and Analysis/NDA/Ethica Evening Surveys.csv", row.names = FALSE)
+```
+
