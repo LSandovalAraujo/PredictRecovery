@@ -18,7 +18,7 @@ dat_files
 
 
 ```{r}
-setwd('C:/Users/Luis/Box/R15 Sensor Preprocessing and Analysis/Data/')
+setwd('/Users/sandoval/Library/CloudStorage/Box-Box/R15 Sensor Preprocessing and Analysis/Data/')
 data = map_df(dat_files, ~read_csv(.x) %>% 
                 mutate(across(everything(), as.character)))
 data
@@ -32,7 +32,7 @@ data2
 ```
 
 ```{r}
-ids = read.csv('C:/Users/Luis/Box/R15 Sensor Preprocessing and Analysis/Data/Ethica IDs.csv')
+ids = read.csv('/Users/sandoval/Library/CloudStorage/Box-Box/R15 Sensor Preprocessing and Analysis/Data/Ethica IDs.csv')
 ids
 ```
 
@@ -55,10 +55,10 @@ write.csv(data3, "C:/Users/Luis/Box/R15 Sensor Preprocessing and Analysis/Ethica
 #raw EMA pulled directly from Ethica - we don't need everything previously where we tried to merge things
 #GUIDs generated from the NIH NDA tool and then reformatted to include participant IDs
 
-morningSurvey = read.csv("C:/Users/Luis/Box/R15 Sensor Preprocessing and Analysis/NDA/responses/survey_responses_6758.csv", check.names = FALSE)
+morningSurvey = read.csv("/Users/sandoval/Library/CloudStorage/Box-Box/R15 Sensor Preprocessing and Analysis/NDA/responses/survey_responses_6758.csv", check.names = FALSE)
 #check.names seems to be how we prevent the prefixes from showing up in the output dataframe, prevents the issue we had above 
-guids = read.csv("C:/Users/Luis/Box/R15 Sensor Preprocessing and Analysis/NDA/GUID RESULTS.csv")
-ethicaIDs = read.csv("C:/Users/Luis/Box/R15 Sensor Preprocessing and Analysis/Data/Ethica IDs.csv")
+guids = read.csv("/Users/sandoval/Library/CloudStorage/Box-Box/R15 Sensor Preprocessing and Analysis/NDA/GUID RESULTS.csv")
+ethicaIDs = read.csv("/Users/sandoval/Library/CloudStorage/Box-Box/R15 Sensor Preprocessing and Analysis/Data/Ethica IDs.csv")
 ```
 
 ```{r}
@@ -117,5 +117,134 @@ colnames(allphysio)
 ```{r}
 allphysio['Window_Type'] = 'Survey'
 allphysio
+```
+```{r}
+temp = read.csv('/Users/sandoval/Downloads/psychophys01_template.csv')
+colnames(temp)
+```
+```{r}
+colnames(allphysio)
+```
+
+```{r}
+allphysiofixed = allphysio %>%
+  rename('src_subject_id' = 'pid', 
+         'assessment_time' = 'Time',
+         'hr_mean' = 'HR_Mean', 
+         'hr_minimum' = 'HR_Minimum', 
+         'hr_maximum' = 'HR_Maximum', 
+         'hr_stdev' = 'HR_Stdev',
+         'hr_rms' = 'HR_RMS', 
+         'hr_mad' = 'HR_MAD', 
+         'hr_mav' = 'HR_MAV', 
+         'hr_median' = 'HR_Median', 
+         'hr_p25' = 'HR_P25', 
+         'hr_p75' = 'HR_P75', 
+         'eda_mean' = 'EDA_Mean', 
+         'eda_minimum' = 'EDA_Minimum', 
+         'eda_maximum' = 'EDA_Maximum', 
+         'eda_stdev' = 'EDA_Stdev', 
+         'eda_rms' = 'EDA_RMS', 
+         'eda_mad' = 'EDA_MAD', 
+         'eda_mav' = 'EDA_MAV', 
+         'eda_median' = 'EDA_Median', 
+         'eda_p25' = 'EDA_P25', 
+         'eda_p75' = 'EDA_P75',  
+         'temp_mean' = 'TEMP_Mean', 
+         'temp_minimum' = 'TEMP_Minimum', 
+         'temp_maximum' = 'TEMP_Maximum', 
+         'temp_stdev' = 'TEMP_Stdev', 
+         'temp_rms' = 'TEMP_RMS', 
+         'temp_mad' = 'TEMP_MAD', 
+         'temp_mav' = 'TEMP_MAV', 
+         'temp_median' = 'TEMP_Median', 
+         'temp_p25' = 'TEMP_P25',  
+         'temp_p75' = 'TEMP_P75', 
+         'window_type' = 'Window_Type')
+allphysiofixed
+```
+```{r}
+newdf = fullIDs[-c(2)]
+newdf
+```
+```{r}
+demos = read.csv('/Users/sandoval/Downloads/eatdisdemo01_template (2).csv')
+demos = demos[-c(3,6:205)]
+demos
+demosEx = read.csv('/Users/sandoval/Downloads/eatdisdemo01_template (2).csv')
+demosEx
+```
+
+```{r}
+behaviorWindows = read.csv('/Users/sandoval/Downloads/Physio Behavior Windows.csv')
+behaviorWindows
+
+```
+
+```{r}
+behaviorWindowsFixed = behaviorWindows %>%
+  rename('src_subject_id' = 'pid', 
+         'assessment_time' = 'Time',
+         'hr_mean' = 'HR_Mean', 
+         'hr_minimum' = 'HR_Minimum', 
+         'hr_maximum' = 'HR_Maximum', 
+         'hr_stdev' = 'HR_Stdev',
+         'hr_rms' = 'HR_RMS', 
+         'hr_mad' = 'HR_MAD', 
+         'hr_mav' = 'HR_MAV', 
+         'hr_median' = 'HR_Median', 
+         'hr_p25' = 'HR_P25', 
+         'hr_p75' = 'HR_P75', 
+         'eda_mean' = 'EDA_Mean', 
+         'eda_minimum' = 'EDA_Minimum', 
+         'eda_maximum' = 'EDA_Maximum', 
+         'eda_stdev' = 'EDA_Stdev', 
+         'eda_rms' = 'EDA_RMS', 
+         'eda_mad' = 'EDA_MAD', 
+         'eda_mav' = 'EDA_MAV', 
+         'eda_median' = 'EDA_Median', 
+         'eda_p25' = 'EDA_P25', 
+         'eda_p75' = 'EDA_P75',  
+         'temp_mean' = 'TEMP_Mean', 
+         'temp_minimum' = 'TEMP_Minimum', 
+         'temp_maximum' = 'TEMP_Maximum', 
+         'temp_stdev' = 'TEMP_Stdev', 
+         'temp_rms' = 'TEMP_RMS', 
+         'temp_mad' = 'TEMP_MAD', 
+         'temp_mav' = 'TEMP_MAV', 
+         'temp_median' = 'TEMP_Median', 
+         'temp_p25' = 'TEMP_P25',  
+         'temp_p75' = 'TEMP_P75', 
+         'window_type' = 'Window')
+behaviorWindowsFixed
+```
+```{r}
+behaviorWindowsFixed2 = behaviorWindowsFixed[-c(1)]
+behaviorWindowsFixed2
+```
+
+
+```{r}
+allphysiofixed2 = left_join(demos, allphysiofixed, by="src_subject_id")
+allphysiofixed2['interview_date'] = format(allphysiofixed2['assessment_time'], "%m-%d-%Y")
+allphysiofixed2
+```
+```{r}
+colnames(allphysiofixed)
+colnames(behaviorWindowsFixed2)
+```
+```{r}
+fullset = rbind(allphysiofixed, behaviorWindowsFixed2)
+fullset
+```
+```{r}
+fullsetfinal = left_join(demos, fullset, by="src_subject_id")
+fullsetfinal = fullsetfinal %>% drop_na('hr_mean')
+fullsetfinal['interview_date'] = format(fullsetfinal['assessment_time'], "%m-%d-%Y")
+fullsetfinal
+```
+
+```{r}
+write.csv(fullsetfinal, '/Users/sandoval/Library/CloudStorage/Box-Box/R15 Sensor Preprocessing and Analysis/NDA/psychophys01.csv')
 ```
 
